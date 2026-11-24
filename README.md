@@ -22,6 +22,7 @@ For a macOS terminal with JDK 11 installed:
 
 ```bash
 export JAVA_HOME=$(/usr/libexec/java_home -v 11)
+touch local.properties
 bash ./gradlew :app:assembleDebug
 bash ./gradlew :app:testDebugUnitTest
 ```
@@ -30,6 +31,17 @@ The wrapper is checked in without executable permission, so the commands use
 `bash`. Gradle needs network access on its first run to download the wrapper,
 plugins, and dependencies. Configure the Android SDK location locally through
 Android Studio or `ANDROID_HOME`; do not commit machine-specific paths.
+
+The Secrets Gradle plugin requires an untracked `local.properties` file even when
+the SDK is located through `ANDROID_HOME`. Android Studio normally creates it;
+`touch` above only creates a missing file without replacing existing settings.
+For a terminal-only SDK setup, set `ANDROID_HOME` or add your SDK's `sdk.dir` to
+this local file. Do not put service credentials in a tracked file.
+
+The manifest also requires `MAPS_API_KEY` from that untracked local file. Use
+your own authorized Maps key for device testing. For build-only unit checks, a
+value such as `MAPS_API_KEY=build-only-placeholder` satisfies substitution but
+does not enable Maps; do not publish or test service behavior with that value.
 
 Building an APK does not restore the original hosted services. Ticketmaster,
 Maps, and Parse-backed screens depend on external service configuration. Use
