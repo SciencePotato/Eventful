@@ -52,6 +52,7 @@ class ParseEventFragment : TMEventFragment() {
     }
 
     override fun loadMoreData() {
+        val requestView = view ?: return
         val query: ParseQuery<ParseEvent> = ParseQuery.getQuery(ParseEvent::class.java)
         val currLocation = ParseUser.getCurrentUser().getParseGeoPoint("Location")
         query.limit = 10
@@ -60,6 +61,7 @@ class ParseEventFragment : TMEventFragment() {
         query.skip = numResults
 
         query.findInBackground { events, e ->
+            if (view !== requestView) return@findInBackground
             if (e != null) {
                 Log.e(TAG, "Error fetching events")
             } else {
@@ -73,6 +75,7 @@ class ParseEventFragment : TMEventFragment() {
     }
 
     override fun queryEvents() {
+        val requestView = view ?: return
         val query: ParseQuery<ParseEvent> = ParseQuery.getQuery(ParseEvent::class.java)
         val currLocation : ParseGeoPoint? = try {
             ParseUser.getCurrentUser().getParseGeoPoint("Location")
@@ -86,6 +89,7 @@ class ParseEventFragment : TMEventFragment() {
 
         parseAdapter.clear()
         query.findInBackground { events, e ->
+            if (view !== requestView) return@findInBackground
             if (e != null) {
                 Log.e(TAG, "Error fetching events")
             } else {

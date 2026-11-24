@@ -97,6 +97,7 @@ open class TMEventFragment : Fragment() {
     }
 
     open fun loadMoreData() {
+        val requestView = view ?: return
         val parameters = hashMapOf<String, String>()
         parameters["apikey"] = getString(R.string.ticketmaster_key)
         parameters["city"] = city
@@ -110,6 +111,7 @@ open class TMEventFragment : Fragment() {
                 call: Call<EventData>,
                 response: Response<EventData>
             ) {
+                if (view !== requestView) return
                 if (!response.isSuccessful) {
                     Log.e(TAG, "Status code ${response.code()}")
                     return
@@ -129,6 +131,7 @@ open class TMEventFragment : Fragment() {
 
 
     open fun queryEvents() {
+        val requestView = view ?: return
         val parameters = hashMapOf<String, String>()
         parameters["apikey"] = getString(R.string.ticketmaster_key)
         parameters["city"] = ""
@@ -147,6 +150,7 @@ open class TMEventFragment : Fragment() {
                 call: Call<EventData>,
                 response: Response<EventData>
             ) {
+                if (view !== requestView) return
                 if (!response.isSuccessful) {
                     Log.e(TAG, "Status code ${response.code()}")
                     return
