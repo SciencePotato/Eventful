@@ -8,6 +8,35 @@
 2. [Developer Comments](#Developer-Comments) 
 
 ## Overview
+### Building the archived Android project
+
+This is a historical Android app, not a current production service. Its checked-in
+toolchain is Android Gradle Plugin **7.1.3**, Gradle **7.2**, and Kotlin **1.6.21**.
+Use **JDK 11** and install Android SDK Platform **31** in Android Studio. The app
+requires Android **8.0 / API 26** or newer. A newer system JDK is not a drop-in
+replacement: Gradle 7.2 fails with `Unsupported class file major version 64`
+under JDK 20.
+
+Open the repository root in Android Studio and choose JDK 11 as the Gradle JDK.
+For a macOS terminal with JDK 11 installed:
+
+```bash
+export JAVA_HOME=$(/usr/libexec/java_home -v 11)
+bash ./gradlew :app:assembleDebug
+bash ./gradlew :app:testDebugUnitTest
+```
+
+The wrapper is checked in without executable permission, so the commands use
+`bash`. Gradle needs network access on its first run to download the wrapper,
+plugins, and dependencies. Configure the Android SDK location locally through
+Android Studio or `ANDROID_HOME`; do not commit machine-specific paths.
+
+Building an APK does not restore the original hosted services. Ticketmaster,
+Maps, and Parse-backed screens depend on external service configuration. Use
+your own authorized configuration for runtime testing, do not copy historical
+credentials, and do not commit secrets. These build commands neither deploy nor
+publish the app.
+
 ### Description: 
 Allows users to find events based on their location and interests. Events include professional and social events. The user can search for a specific event through filters, such as the user's current location, the type of event (social/professional), the organizer of the event, etc.
 
