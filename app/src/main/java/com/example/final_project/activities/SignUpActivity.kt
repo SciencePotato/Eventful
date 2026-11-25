@@ -20,16 +20,20 @@ class SignUpActivity : AppCompatActivity() {
             goToMain()
         }
 
-        findViewById<Button>(R.id.Signup_SignUp).setOnClickListener {
-            val username = findViewById<EditText>(R.id.Signup_Username).text.toString()
-            val password = findViewById<EditText>(R.id.Signup_Password).text.toString()
-            signUpUser(username, password)
-            goToMain()
-        }
+        bindSignUpButton()
 
         findViewById<Button>(R.id.Signup_Back).setOnClickListener {
             goToLogin()
         }
+    }
+
+    internal fun bindSignUpButton() {
+        findViewById<Button>(R.id.Signup_SignUp).setOnClickListener {
+            val username = findViewById<EditText>(R.id.Signup_Username).text.toString()
+            val password = findViewById<EditText>(R.id.Signup_Password).text.toString()
+            signUpUser(username, password)
+        }
+
     }
 
     private fun signUpUser(username: String, password: String) {
